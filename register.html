@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="css/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <title>Register</title>
+</head>
+<body>
+
+<div class="centered-content">
+  <div class="login-container">
+    <a id="register-name" href="index.html">欧洲玩乐网</a>
+    <h2>注册</h2>
+    <form id="register-form">
+      <input type="email" id="email" class="form-control" placeholder="邮箱" required />
+      <input type="password" id="password" class="form-control" placeholder="密码" required />
+      <input type="password" id="confirm-password" class="form-control" placeholder="确认密码" required />
+      <button type="submit" class="submit-button">注册</button>
+      <button type="button" class="register-button" onclick="location.href='login.html'">登录</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.getElementById('register-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var username = document.getElementById('username').value;
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var confirmPassword = document.getElementById('confirm-password').value;
+    console.log('Username: ', username);
+    console.log('Email: ', email);
+    console.log('Password: ', password);
+    console.log('Confirm Password: ', confirmPassword);
+  });
+</script>
+<script src="js/Register.js"></script>
+</body>
+</html>
