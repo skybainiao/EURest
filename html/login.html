@@ -44,7 +44,7 @@
       border: 1px solid #ddd;
       box-sizing: border-box;
     }
-    .submit-button, .register-button {
+    .submit-button{
       width: 100%;
       padding: 10px;
       border-radius: 5px;
@@ -52,6 +52,20 @@
       cursor: pointer;
       margin-bottom: 10px;
     }
+
+    .register-button {
+      font-size: 1em; /* 调整字体大小 */
+      height: 40px; /* 调整按钮高度 */
+      width: 100%;
+      line-height: 40px; /* 调整行高以垂直居中文本 */
+      display: inline-block; /* 使链接表现得更像按钮 */
+      text-decoration: none; /* 移除下划线 */
+      color: white; /* 调整文字颜色 */
+      border-radius: 5px;
+    }
+
+
+
     .submit-button {
       background-color: #007BFF;
       color: white;
@@ -81,7 +95,7 @@
       <input type="text" id="email" class="form-control" placeholder="邮箱" required />
       <input type="password" id="password" class="form-control" placeholder="密码" required />
       <button id="login" class="submit-button">登录</button>
-      <button type="button" id="register" class="register-button" onclick="location.href='register.html'">注册</button>
+      <a type="button" id="register" class="register-button" href="register.html">注册</a>
     </form>
   </div>
 </div>
