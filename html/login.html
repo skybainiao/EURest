@@ -2,9 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="../css/login.css">
+
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <title>Login</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+      display: flex;  /* 新增，使body具有flex属性 */
+      justify-content: center;  /* 新增，使body的子元素在垂直方向上居中 */
+      align-items: center;  /* 新增，使body的子元素在水平方向上居中 */
+      height: 75vh;  /* 新增，使body的高度为视窗的高度 */
+    }
+    .centered-content {  /* 新增，用于包含所有的内容并使其居中 */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-container {
+      max-width: 400px;
+      text-align: center;
+    }
+    #login-name {
+      font-family: 'Pacifico', cursive;
+      font-size:4em;
+      color: #007BFF;
+      text-decoration: none;
+    }
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+    .submit-button, .register-button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .submit-button {
+      background-color: #007BFF;
+      color: white;
+    }
+    .submit-button:hover {
+      background-color: #0056b3;
+    }
+    .register-button {
+      background-color: #6c757d;
+      color: white;
+    }
+    .register-button:hover {
+      background-color: #5a6268;
+    }
+
+  </style>
 
 </head>
 <body>
@@ -18,7 +81,7 @@
       <input type="text" id="email" class="form-control" placeholder="邮箱" required />
       <input type="password" id="password" class="form-control" placeholder="密码" required />
       <button id="login" class="submit-button">登录</button>
-      <button type="button" class="register-button" onclick="location.href='register.html'">注册</button>
+      <button type="button" id="register" class="register-button" onclick="location.href='register.html'">注册</button>
     </form>
   </div>
 </div>
@@ -28,7 +91,45 @@
 
 
 
-<script src="../js/Login.js"></script>
+
+<script>
+
+  let username = document.getElementById('username').value;
+  let email = document.getElementById('email').value;
+  let password = document.getElementById('password').value;
+  let login = document.getElementById('login').value;
+  login.onclick=()=>writeUserData();
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyABXKTeI2T16mETkhYohvu4Y1X20hvL3cU",
+    authDomain: "eufun-f0a72.firebaseapp.com",
+    databaseURL: "https://eufun-f0a72-default-rtdb.europe-west1.firebasedatabase.app/", // Replace this with your URL
+    projectId: "eufun-f0a72",
+    storageBucket: "eufun-f0a72.appspot.com",
+    messagingSenderId: "1041084911229",
+    appId: "1:1041084911229:web:4df4ec093dcf32b2696b14",
+    measurementId: "G-PQ3K5KZ2NJ"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+
+
+  var database = firebase.database();
+
+  function writeUserData() {
+    console.log("1111111")
+    firebase.database().ref('users/' + name).set({
+      username: username,
+      email: email,
+      password : password
+    });
+  }
+
+
+
+
+</script>
 
 
 </body>
