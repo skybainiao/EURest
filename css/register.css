@@ -19,14 +19,14 @@ body {
 }
 #login-name {
   font-family: 'Pacifico', cursive;
-  font-size:4em;
+  font-size:5em;
   color: #007BFF;
   text-decoration: none;
 }
 
 #register-name {
   font-family: 'Pacifico', cursive;
-  font-size:6em;
+  font-size:4em;
   color: #007BFF;
   text-decoration: none;
 }

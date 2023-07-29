@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="../css/login.css">
+  <link rel="stylesheet" type="text/css" href="../css/login.css">
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <title>Login</title>
 
@@ -14,9 +14,10 @@
     <a id="login-name" href="../index.html">欧洲玩乐网</a>
     <h2>登录</h2>
     <form id="login-form">
-      <label for="email">Email</label><input type="text" id="email" class="form-control" placeholder="邮箱" required />
-      <label for="password">Password</label><input type="password" id="password" class="form-control" placeholder="密码" required />
-      <button type="submit" class="submit-button">登录</button>
+      <input type="text" id="username" class="form-control" placeholder="用户名" required />
+      <input type="text" id="email" class="form-control" placeholder="邮箱" required />
+      <input type="password" id="password" class="form-control" placeholder="密码" required />
+      <button id="login" class="submit-button">Login</button>
       <button type="button" class="register-button" onclick="location.href='register.html'">注册</button>
     </form>
   </div>
@@ -28,6 +29,7 @@
 
 
 <script src="../js/Login.js"></script>
+
 
 </body>
 </html>
