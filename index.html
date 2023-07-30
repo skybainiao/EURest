@@ -160,7 +160,31 @@
     </section>
   </main>
 
+  <script>
+    let username = localStorage.getItem('username');
+    let user = document.getElementById('lg');
+    user.onclick=()=>checkProfile();
 
+    window.onload=function (){
+      changeStatus();
+    }
+
+    function changeStatus(){
+      if (username!==null){
+        user.innerHTML=username;
+      }
+    }
+
+    function checkProfile(){
+      if (username===null){
+        window.location.href = "html/login.html";
+      }
+      else {
+        window.location.href = "html/profile.html";
+      }
+    }
+
+  </script>
 
 
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>
