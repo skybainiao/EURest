@@ -74,7 +74,14 @@
 
   <main>
     <section class="slide-page" data-index="0">
-      <h1 id="tip">美食推荐</h1>
+      <div class="header-section">
+        <h1 id="tip">美食推荐</h1>
+        <a href="html/post.html">
+          <button id="upload">发布</button>
+        </a>
+
+      </div>
+
       <div class="grid-container">
 
         <!-- Grid Item 1 -->
@@ -164,6 +171,9 @@
     let username = localStorage.getItem('username');
     let user = document.getElementById('lg');
     user.onclick=()=>checkProfile();
+
+
+
 
     window.onload=function (){
       changeStatus();

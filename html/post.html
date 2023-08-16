@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-database-compat.js"></script>
+
+  <title>发布店铺美食信息</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
+
+    form {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="file"] {
+      margin-bottom: 20px;
+    }
+
+    button[type="submit"] {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    #loading-icon {
+      display: inline-block;
+      animation: spin 1s linear infinite;
+      border: 5px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 5px solid #007BFF;
+      width: 20px;
+      height: 20px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    #feedback-container {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>发布店铺美食信息</h1>
+
+<div id="feedback-container">
+  <span id="feedback">上传中...</span><div id="loading-icon"></div>
+</div>
+
+<form action="/path/to/server" method="post" enctype="multipart/form-data">
+  <label for="title">标题:</label>
+  <input type="text" id="title" name="title" required>
+
+  <label for="storeName">店铺名称:</label>
+  <input type="text" id="storeName" name="storeName" required>
+
+  <label for="address">地址:</label>
+  <input type="text" id="address" name="address" required>
+
+  <label for="introduction">店铺介绍:</label>
+  <textarea id="introduction" name="introduction" rows="4" required></textarea>
+
+  <label for="phoneNumber">店主电话:</label>
+  <input type="tel" id="phoneNumber" name="phoneNumber" required>
+
+  <label for="images">店铺图片 (可以选择多张):</label>
+  <input type="file" id="images" name="images" multiple accept="image/*" required>
+
+  <button id="submitBtn" type="submit">发布</button>
+</form>
+
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyABXKTeI2T16mETkhYohvu4Y1X20hvL3cU",
+    authDomain: "eufun-f0a72.firebaseapp.com",
+    databaseURL: "https://eufun-f0a72-default-rtdb.europe-west1.firebasedatabase.app/",
+    projectId: "eufun-f0a72",
+    storageBucket: "eufun-f0a72.appspot.com",
+    messagingSenderId: "1041084911229",
+    appId: "1:1041084911229:web:4df4ec093dcf32b2696b14",
+    measurementId: "G-PQ3K5KZ2NJ"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  function showLoading() {
+    document.getElementById("feedback-container").style.display = "inline";
+  }
+
+  function hideLoading() {
+    document.getElementById("feedback-container").style.display = "none";
+  }
+
+
+  function showFeedback(message, isSuccess = true) {
+    const feedbackEl = document.getElementById("feedback");
+    const loadingIcon = document.getElementById("loading-icon");
+    feedbackEl.innerHTML = message;
+    feedbackEl.style.color = isSuccess ? "green" : "red";
+    loadingIcon.style.display = "none";  // Hide the loading icon
+    document.getElementById("feedback-container").style.display = "inline";  // Show feedback container
+  }
+
+  function uploadData() {
+    return new Promise((resolve, reject) => {
+      const db = firebase.database().ref("shopDetails");
+
+      const title = document.getElementById("title").value;
+      const shopName = document.getElementById("storeName").value;
+      const address = document.getElementById("address").value;
+      const description = document.getElementById("introduction").value;
+      const phoneNumber = document.getElementById("phoneNumber").value;
+
+      // Create a new post reference with an auto-generated id
+      let newPostRef = db.push();
+
+      newPostRef.set({
+        title: title,
+        shopName: shopName,
+        address: address,
+        description: description,
+        phoneNumber: phoneNumber
+      }).then(() => {
+        console.log("数据上传成功");
+        resolve();
+      }).catch((error) => {
+        console.error("数据上传失败:", error);
+        reject(error);
+      });
+    });
+  }
+
+  function uploadImage(file) {
+    return new Promise((resolve, reject) => {
+      const storageRef = firebase.storage().ref();
+      const imagesRef = storageRef.child(`shopImages/${file.name}`);
+
+      imagesRef.put(file).then((snapshot) => {
+        console.log('Uploaded a blob or file!');
+        resolve();
+      }).catch((error) => {
+        console.error("图片上传失败:", error);
+        reject(error);
+      });
+    });
+  }
+
+  document.getElementById("submitBtn").addEventListener("click", function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    showLoading();
+
+    // After all data and images are uploaded
+    Promise.all([
+      uploadData(),
+      ...Array.from(document.getElementById("images").files).map(file => uploadImage(file))
+    ]).then(() => {
+      showFeedback("上传成功！", true);
+      resetForm();
+    }).catch((error) => {
+      showFeedback("上传失败，请重试。", false);
+      console.error("上传错误:", error);
+    });
+  });
+
+
+  function resetForm() {
+    // 清空文本输入框
+    document.getElementById("title").value = '';
+    document.getElementById("storeName").value = '';
+    document.getElementById("address").value = '';
+    document.getElementById("introduction").value = '';
+    document.getElementById("phoneNumber").value = '';
+
+    // 清空文件选择器
+    document.getElementById("images").value = '';
+  }
+
+</script>
+
+</body>
+
+</html>

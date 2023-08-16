@@ -112,3 +112,41 @@ section {
     width: 80%;
   }
 }
+
+/* 针对包裹h1和button的div使用flex布局 */
+section .slide-page > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap; /* 新增此行 */
+
+}
+
+/* 发布按钮的装饰 */
+#upload {
+  padding: 10px 15px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+#upload:hover {
+  background-color: #0056b3;
+}
+
+.header-section {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#tip {
+  /* 添加一些空间在 h1 和按钮之间 */
+  margin: 0 20px 0 0;
+}
+
