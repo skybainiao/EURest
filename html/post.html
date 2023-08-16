@@ -136,8 +136,8 @@
   <button id="submitBtn" type="submit">发布</button>
 </form>
 
-<script>
-  var firebaseConfig = {
+<script type="module">
+  const firebaseConfig = {
     apiKey: "AIzaSyABXKTeI2T16mETkhYohvu4Y1X20hvL3cU",
     authDomain: "eufun-f0a72.firebaseapp.com",
     databaseURL: "https://eufun-f0a72-default-rtdb.europe-west1.firebasedatabase.app/",
@@ -148,6 +148,37 @@
     measurementId: "G-PQ3K5KZ2NJ"
   };
   firebase.initializeApp(firebaseConfig);
+
+
+
+
+  // 获取username
+  let username = localStorage.getItem("username");
+  if (!username) {
+    username = prompt("请输入您的用户名:");
+    localStorage.setItem("username", username);
+  }
+
+  let currentPostIdRef = firebase.database().ref("currentPostId");
+
+  function getNewPostId() {
+    return new Promise((resolve, reject) => {
+      currentPostIdRef.transaction(currentId => {
+        if (currentId === null) {
+          return 1; // 如果是第一次上传，则从1开始
+        }
+        return currentId + 1; // 否则加1
+      }, (error, committed, snapshot) => {
+        if (error) {
+          reject(error);
+        } else if (!committed) {
+          reject(new Error("Transaction not committed"));
+        } else {
+          resolve(snapshot.val());
+        }
+      });
+    });
+  }
 
   function showLoading() {
     document.getElementById("feedback-container").style.display = "inline";
@@ -167,7 +198,7 @@
     document.getElementById("feedback-container").style.display = "inline";  // Show feedback container
   }
 
-  function uploadData() {
+  function uploadData(postId) {
     return new Promise((resolve, reject) => {
       const db = firebase.database().ref("shopDetails");
 
@@ -178,8 +209,8 @@
       const phoneNumber = document.getElementById("phoneNumber").value;
       const storeType = document.getElementById("storeType").value;
 
-      // Create a new post reference with an auto-generated id
-      let newPostRef = db.push();
+      // 使用给定的postId
+      let newPostRef = db.child(postId);
 
       newPostRef.set({
         title: title,
@@ -198,10 +229,13 @@
     });
   }
 
-  function uploadImage(file) {
-    return new Promise((resolve, reject) => {
+  function uploadImage(file,postId) {
+    return new Promise(async (resolve, reject) => {
+      const shopName = document.getElementById("storeName").value;
+
       const storageRef = firebase.storage().ref();
-      const imagesRef = storageRef.child(`shopImages/${file.name}`);
+      const imagesRef = storageRef.child(`shopImages/${shopName}/${postId}/${file.name}`);
+
 
       imagesRef.put(file).then((snapshot) => {
         console.log('Uploaded a blob or file!');
@@ -213,23 +247,27 @@
     });
   }
 
-  document.getElementById("submitBtn").addEventListener("click", function(event) {
+  document.getElementById("submitBtn").addEventListener("click", async function(event) {
     event.preventDefault(); // Prevent default form submission
 
     showLoading();
 
-    // After all data and images are uploaded
-    Promise.all([
-      uploadData(),
-      ...Array.from(document.getElementById("images").files).map(file => uploadImage(file))
-    ]).then(() => {
+    try {
+      const postId = await getNewPostId();  // 获取新的postId
+
+      await Promise.all([
+        uploadData(postId),
+        ...Array.from(document.getElementById("images").files).map(file => uploadImage(file, postId))  // 确保使用相同的postId
+      ]);
+
       showFeedback("上传成功！", true);
       resetForm();
-    }).catch((error) => {
+    } catch (error) {
       showFeedback("上传失败，请重试。", false);
       console.error("上传错误:", error);
-    });
+    }
   });
+
 
 
   function resetForm() {
@@ -243,6 +281,8 @@
     // 清空文件选择器
     document.getElementById("images").value = '';
   }
+
+
 
 </script>
 
