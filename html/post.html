@@ -73,6 +73,27 @@
     #feedback-container {
       display: none;
     }
+
+    select {
+      width: 106%; /* 使其与text对齐 */
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      appearance: none; /* 去除默认外观 */
+      background-color: white;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="black"><path d="M2.646 4.646a.5.5 0 01.708 0L6 7.293l2.646-2.647a.5.5 0 11.708.708l-3 3a.5.5 0 01-.708 0l-3-3a.5.5 0 010-.708z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 12px 12px;
+    }
+
+    select:hover, select:focus {
+      border-color: #007BFF;
+    }
+
   </style>
 </head>
 
@@ -90,6 +111,13 @@
 
   <label for="storeName">店铺名称:</label>
   <input type="text" id="storeName" name="storeName" required>
+
+  <label for="storeType">店铺种类:
+    <select id="storeType" name="storeType" required>
+      <option value="中餐">中餐</option>
+      <option value="西餐">西餐</option>
+    </select>
+  </label>
 
   <label for="address">地址:</label>
   <input type="text" id="address" name="address" required>
@@ -146,6 +174,7 @@
       const address = document.getElementById("address").value;
       const description = document.getElementById("introduction").value;
       const phoneNumber = document.getElementById("phoneNumber").value;
+      const storeType = document.getElementById("storeType").value;
 
       // Create a new post reference with an auto-generated id
       let newPostRef = db.push();
@@ -155,7 +184,8 @@
         shopName: shopName,
         address: address,
         description: description,
-        phoneNumber: phoneNumber
+        phoneNumber: phoneNumber,
+        storeType: storeType
       }).then(() => {
         console.log("数据上传成功");
         resolve();
