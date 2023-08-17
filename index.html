@@ -85,91 +85,14 @@
       </div>
 
       <div class="grid-container">
-
-        <!-- Grid Item 1 -->
-        <div class="grid-item">
-          <a id="item1" class="movie" target="_blank">
-            <div class="cover-wp">
-              <img id="img1"   alt="餐厅 1">
-            </div>
-            <p>
-              <strong id="s1">标题</strong>
-            </p>
-            <p id="time1">
-              店铺名称
-            </p>
-            <p id="rating1">
-             评分演示部分 Rating:♥♥♥♥♥
-            </p>
-          </a>
-        </div>
-
-        <div class="grid-item">
-          <a id="item2" class="movie" target="_blank">
-            <div class="cover-wp">
-              <img id="img2"  alt="餐厅 2">
-            </div>
-            <p>
-              <strong id="s2">
-                标题
-              </strong>
-            </p>
-            <p id="time2">
-              店铺名称
-            </p>
-            <p id="rating2">
-              评分演示部分 Rating:♥♥♥♥♥
-            </p>
-          </a>
-        </div>
-
-        <div class="grid-item">
-          <a id="item3" class="movie" target="_blank">
-            <div class="cover-wp">
-              <img id="img3"   alt="餐厅 3">
-            </div>
-            <p>
-              <strong id="s3">
-                标题
-              </strong>
-            </p>
-            <p id="time3">
-              店铺名称
-            </p>
-            <p id="rating3">
-              评分演示部分 Rating:♥♥♥♥♥
-            </p>
-          </a>
-        </div>
-
-        <div class="grid-item">
-          <a id="item4" class="movie" target="_blank">
-            <div class="cover-wp">
-              <img id="img4"   alt="餐厅 4">
-            </div>
-            <p>
-              <strong id="s4">
-                标题
-              </strong>
-            </p>
-            <p id="time4">
-              店铺名称
-            </p>
-            <p id="rating4">
-              评分演示部分 Rating:♥♥♥♥♥
-            </p>
-          </a>
-        </div>
-
+        <!-- Grid items will be dynamically inserted here -->
         <div class="pagination">
           <button id="prevPage">上一页</button>
           <button id="nextPage">下一页</button>
         </div>
-
-
-
-
       </div>
+
+
     </section>
   </main>
 
@@ -223,25 +146,22 @@
           return;
         }
 
-        let posts = {}; // Create an object for the current page posts
-        let postKeys = Object.keys(allPosts).slice(startIndex, endIndex); // Get the post keys for this page
+        let posts = {};
+        let postKeys = Object.keys(allPosts).slice(startIndex, endIndex);
         postKeys.forEach(key => {
           posts[key] = allPosts[key];
         });
-
-        console.log("Posts for current page:", posts);
 
         let fetchImageURLPromises = [];
 
         for (let postId in posts) {
           let shopName = posts[postId].shopName;
-
           let imageFolderPath = `shopImages/${shopName}/${postId}/`;
           let imageFolderRef = firebase.storage().ref(imageFolderPath);
 
           let promise = imageFolderRef.listAll().then(result => {
             if (result.items.length === 0) {
-              return null; // Replace with your default image URL if needed
+              return null;
             }
             let randomImageRef = result.items[Math.floor(Math.random() * result.items.length)];
             return randomImageRef.getDownloadURL();
@@ -269,43 +189,75 @@
     }
 
 
+    // Updated populatePosts function
     function populatePosts(posts) {
       let postArray = Object.values(posts);
+      const gridContainer = document.querySelector('.grid-container');
+
+      // Clear current grid items
+      gridContainer.innerHTML = '';
 
       postArray.forEach((post, index) => {
-        const item = document.getElementById(`item${index + 1}`);
-        const img = document.getElementById(`img${index + 1}`);
-        const title = document.getElementById(`s${index + 1}`);
-        const shopName = document.getElementById(`time${index + 1}`);
-        //const rating = document.getElementById(`rating${index + 1}`);
+        const gridItem = document.createElement('div');
+        gridItem.className = 'grid-item';
 
-        item.href = `post.html?id=${post.id}`;
+        const anchor = document.createElement('a');
+        anchor.id = `item${index + 1}`;
+        anchor.className = 'movie';
+        anchor.target = '_blank';
+        anchor.href = `post.html?id=${post.id}`;
+
+        const coverDiv = document.createElement('div');
+        coverDiv.className = 'cover-wp';
+
+        const img = document.createElement('img');
+        img.id = `img${index + 1}`;
         if (post.imageURL) {
           img.src = post.imageURL;
         } else {
-          img.src = 'path_to_default_image.jpg'; // replace this with your default image path
+          img.src = 'path_to_default_image.jpg';
         }
-        title.innerText = post.title;
-        shopName.innerText = post.shopName;
-        //rating.innerText = `评分演示部分 Rating: ${Array(Number(post.rating)).fill('♥').join('')}`;
+        coverDiv.appendChild(img);
+
+        const titleP = document.createElement('p');
+        const strong = document.createElement('strong');
+        strong.id = `s${index + 1}`;
+        strong.innerText = post.title;
+        titleP.appendChild(strong);
+
+        const shopNameP = document.createElement('p');
+        shopNameP.id = `time${index + 1}`;
+        shopNameP.innerText = post.shopName;
+
+        anchor.appendChild(coverDiv);
+        anchor.appendChild(titleP);
+        anchor.appendChild(shopNameP);
+        gridItem.appendChild(anchor);
+        gridContainer.appendChild(gridItem);
       });
-      if (!posts) {
-        console.error("No posts to populate");
-        return;
-      }
+
+      // Add back the pagination
+      gridContainer.innerHTML += `
+    <div class="pagination">
+      <button id="prevPage">上一页</button>
+      <button id="nextPage">下一页</button>
+    </div>
+  `;
+
+      // Re-attach event listeners to the pagination buttons
+      document.getElementById('nextPage').addEventListener('click', function() {
+        currentPage++;
+        loadPosts(currentPage);
+      });
+
+      document.getElementById('prevPage').addEventListener('click', function() {
+        if (currentPage > 1) {
+          currentPage--;
+          loadPosts(currentPage);
+        }
+      });
     }
 
-    document.getElementById('nextPage').addEventListener('click', function() {
-      currentPage++;
-      loadPosts(currentPage);
-    });
-
-    document.getElementById('prevPage').addEventListener('click', function() {
-      if (currentPage > 1) {
-        currentPage--;
-        loadPosts(currentPage);
-      }
-    });
 
   </script>
 
