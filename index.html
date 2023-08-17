@@ -172,10 +172,21 @@
     function changeStatus() {
       let username = localStorage.getItem('username');
       let user = document.getElementById('lg');
+      let uploadButton = document.getElementById('upload');
+
       if (username !== null) {
         user.innerHTML = username;
+        uploadButton.disabled = false; // 用户已登录，发布按钮可用
+      } else {
+        user.innerHTML = "登录/注册";
+        uploadButton.disabled = true; // 用户未登录，发布按钮不可用
+        uploadButton.addEventListener('click', function(event) {
+          event.preventDefault(); // 阻止默认事件（链接跳转）
+          alert("请先登录！");
+        });
       }
     }
+
 
     function checkProfile() {
       let username = localStorage.getItem('username');
