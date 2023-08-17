@@ -181,7 +181,7 @@
         user.innerHTML = "登录/注册";
         uploadButton.disabled = true; // 用户未登录，发布按钮不可用
         uploadButton.addEventListener('click', function(event) {
-          //event.preventDefault(); // 阻止默认事件（链接跳转）
+          event.preventDefault(); // 阻止默认事件（链接跳转）
           alert("请先登录！");
         });
       }

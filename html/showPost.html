@@ -5,22 +5,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>showPost</title>
-  <!-- other meta tags, styles etc. -->
+
+  <!-- Firebase scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-storage-compat.js"></script>
 
+  <!-- Styles -->
   <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .post-content {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-details h1 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .post-details p {
+      color: #666;
+      line-height: 1.6;
+    }
+
     .images-slider {
       display: flex;
       overflow-x: auto;
       white-space: nowrap;
+      margin-bottom: 20px;
     }
 
     .images-slider img {
       margin-right: 10px;
-    max-width: 300px;
-    height: auto;
+      max-width: 300px;
+      height: auto;
+      border-radius: 5px;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .images-slider img:hover {
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -37,7 +70,6 @@
     <!-- Post details will be populated dynamically -->
   </div>
 </div>
-
 <!-- Firebase and other JS scripts -->
 <script>
   let firebaseConfig = {
