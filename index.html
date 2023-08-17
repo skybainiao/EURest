@@ -37,6 +37,35 @@
       color: lightblue;
       border-radius: 5px;
     }
+
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .pagination button {
+      padding: 10px 20px;
+      margin: 0 5px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .pagination button:hover {
+      background-color: #2980b9;
+    }
+
+    .pagination button:disabled {
+      background-color: #95a5a6;
+      cursor: not-allowed;
+    }
+
+
   </STYLE>
 </head>
 
@@ -55,10 +84,10 @@
       <ul>
         <li><a id="28" href="#">中餐</a></li>
         <li><a id="12" href="#">西餐</a></li>
-        <li><a id="35" href="#">城市</a></li>
-        <li><a id="80" href="#">交通</a></li>
-        <li><a id="18" href="#">景点</a></li>
         <li><a id="14" href="#">酒店</a></li>
+        <li><a id="18" href="#">景点</a></li>
+        <li><a id="80" href="#">交通</a></li>
+        <li><a id="35" href="#">城市</a></li>
 
 
         <!-- add more nav items as needed -->
@@ -77,7 +106,7 @@
   <main>
     <section class="slide-page" data-index="0">
       <div class="header-section">
-        <h1 id="tip">美食推荐</h1>
+        <h1 id="tip">主页推荐</h1>
         <a href="html/post.html">
           <button id="upload">发布</button>
         </a>
@@ -112,7 +141,32 @@
 
     window.onload = function() {
       changeStatus();
-      loadPosts(currentPage);
+      loadPosts(currentPage, null); // 初始化为 null 类别
+
+      // 为导航链接添加事件监听器
+      document.getElementById("28").addEventListener('click', function() {
+        loadPosts(currentPage, '中餐');
+      });
+
+      document.getElementById("12").addEventListener('click', function() {
+        loadPosts(currentPage, '西餐');
+      });
+
+      document.getElementById("18").addEventListener('click', function() {
+        loadPosts(currentPage, '景点');
+      });
+
+      document.getElementById("14").addEventListener('click', function() {
+        loadPosts(currentPage, '酒店');
+      });
+
+      document.getElementById("35").addEventListener('click', function() {
+        loadPosts(currentPage, '城市');
+      });
+
+      document.getElementById("80").addEventListener('click', function() {
+        loadPosts(currentPage, '交通');
+      });
     };
 
     function changeStatus() {
@@ -136,10 +190,17 @@
     const postsPerPage = 4;
 
 
-    function loadPosts(page) {
+    function loadPosts(page, storeType) {
       const startIndex = (page - 1) * postsPerPage;
       const endIndex = startIndex + postsPerPage;
-      database.ref('shopDetails').once('value').then(snapshot => {
+
+      let query = database.ref('shopDetails');
+
+      if (storeType) {
+        query = query.orderByChild('storeType').equalTo(storeType);
+      }
+
+      query.once('value').then(snapshot => {
         let allPosts = snapshot.val();
         if (!allPosts) {
           console.error("No posts retrieved from database.");
@@ -186,7 +247,16 @@
       }).catch(error => {
         console.error("Error fetching posts from database: ", error);
       });
+
+
+      let totalPosts = Object.keys(allPosts).length;
+
+
+      document.getElementById('prevPage').disabled = currentPage <= 1;
+      document.getElementById('nextPage').disabled = currentPage * postsPerPage >= totalPosts;
+
     }
+
 
 
     // Updated populatePosts function

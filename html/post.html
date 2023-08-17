@@ -111,26 +111,29 @@
   <label for="title">标题:</label>
   <input type="text" id="title" name="title" required>
 
-  <label for="storeName">店铺名称:</label>
+  <label for="storeName">名称(店铺,酒店,景点):</label>
   <input type="text" id="storeName" name="storeName" required>
 
-  <label for="storeType">店铺种类:
+  <label for="storeType">种类:
     <select id="storeType" name="storeType" required>
       <option value="中餐">中餐</option>
       <option value="西餐">西餐</option>
+      <option value="交通">交通</option>
+      <option value="景点">景点</option>
+      <option value="酒店">酒店</option>
     </select>
   </label>
 
   <label for="address">地址:</label>
   <input type="text" id="address" name="address" required>
 
-  <label for="introduction">店铺介绍:</label>
+  <label for="introduction">介绍:</label>
   <textarea id="introduction" name="introduction" rows="4" required></textarea>
 
-  <label for="phoneNumber">店主电话:</label>
+  <label for="phoneNumber">联系电话:</label>
   <input type="tel" id="phoneNumber" name="phoneNumber" required>
 
-  <label for="images">店铺图片 (可以选择多张):</label>
+  <label for="images">图片 (可以选择多张):</label>
   <input type="file" id="images" name="images" multiple accept="image/*" required>
 
   <button id="submitBtn" type="submit">发布</button>
