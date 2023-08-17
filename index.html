@@ -181,7 +181,7 @@
         user.innerHTML = "登录/注册";
         uploadButton.disabled = true; // 用户未登录，发布按钮不可用
         uploadButton.addEventListener('click', function(event) {
-          event.preventDefault(); // 阻止默认事件（链接跳转）
+          //event.preventDefault(); // 阻止默认事件（链接跳转）
           alert("请先登录！");
         });
       }
@@ -222,6 +222,7 @@
         let postKeys = Object.keys(allPosts).slice(startIndex, endIndex);
         postKeys.forEach(key => {
           posts[key] = allPosts[key];
+          posts[key].id = key;
         });
 
         let fetchImageURLPromises = [];
@@ -260,11 +261,9 @@
       });
 
 
-      let totalPosts = Object.keys(allPosts).length;
 
 
-      document.getElementById('prevPage').disabled = currentPage <= 1;
-      document.getElementById('nextPage').disabled = currentPage * postsPerPage >= totalPosts;
+
 
     }
 
@@ -285,8 +284,9 @@
         const anchor = document.createElement('a');
         anchor.id = `item${index + 1}`;
         anchor.className = 'movie';
-        anchor.target = '_blank';
-        anchor.href = `post.html?id=${post.id}`;
+        anchor.target="_self";
+        anchor.href = `html/showPost.html?id=${post.id}`;
+
 
         const coverDiv = document.createElement('div');
         coverDiv.className = 'cover-wp';
