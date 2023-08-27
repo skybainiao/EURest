@@ -423,7 +423,7 @@
       let query = database.ref('shopDetails');
 
       if (storeType) {
-        query = query.orderByChild('type').equalTo(storeType);
+        query = query.orderByChild('storeType').equalTo(storeType);
       }
 
       query.once('value').then(snapshot => {
@@ -565,12 +565,16 @@
         const anchor = document.createElement('a');
         anchor.id = `item${index + 1}`;
         anchor.className = 'movie';
-        anchor.target="_self";
+        anchor.target = "_self";
         anchor.href = `html/showPost.html?id=${post.id}`;
 
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'content-wrap';
+        contentDiv.style.display = 'flex';
 
         const coverDiv = document.createElement('div');
         coverDiv.className = 'cover-wp';
+        coverDiv.style.width = '30%';
 
         const img = document.createElement('img');
         img.id = `img${index + 1}`;
@@ -580,20 +584,24 @@
           img.src = 'path_to_default_image.jpg';
         }
         coverDiv.appendChild(img);
+        contentDiv.appendChild(coverDiv);
 
-        const titleP = document.createElement('p');
+        const textDiv = document.createElement('div');
+        textDiv.style.flexGrow = '1';
+        textDiv.style.paddingLeft = '10px';
+
         const strong = document.createElement('strong');
         strong.id = `s${index + 1}`;
         strong.innerText = post.title;
-        titleP.appendChild(strong);
+        textDiv.appendChild(strong);
 
         const shopNameP = document.createElement('p');
         shopNameP.id = `time${index + 1}`;
         shopNameP.innerText = post.shopName;
+        textDiv.appendChild(shopNameP);
 
-        anchor.appendChild(coverDiv);
-        anchor.appendChild(titleP);
-        anchor.appendChild(shopNameP);
+        contentDiv.appendChild(textDiv);
+        anchor.appendChild(contentDiv);
         gridItem.appendChild(anchor);
         gridContainer.appendChild(gridItem);
       });
@@ -604,7 +612,7 @@
       <button id="prevPage">上一页</button>
       <button id="nextPage">下一页</button>
     </div>
-  `;
+    `;
 
       // Re-attach event listeners to the pagination buttons
       document.getElementById('nextPage').addEventListener('click', function() {
@@ -619,6 +627,8 @@
         }
       });
     }
+
+
 
 
   </script>
