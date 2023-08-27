@@ -111,7 +111,15 @@
     const postId = getPostIdFromURL();
     fetchPostDetails(postId);
 
-
+    const deleteButton = document.getElementById('deletePostButton');
+    if (deleteButton) {
+      deleteButton.addEventListener('click', function() {
+        const postId = getPostIdFromURL();
+        if (confirm('确实要删除此帖子吗？')) {
+          deletePost(postId);
+        }
+      });
+    }
   }
 
   function deletePost(postId) {
@@ -119,7 +127,7 @@
     postRef.remove()
       .then(function() {
         alert('帖子删除成功！');
-        window.location.href = 'your_homepage_url_here.html'; // 修改为你的主页URL
+        window.location.href = 'index.html'; // 修改为你的主页URL
       })
       .catch(function(error) {
         console.error("删除帖子时发生错误：", error);
@@ -149,15 +157,7 @@
       populateImages(imageFolderPath);
     });
 
-    const deleteButton = document.getElementById('deletePostButton');
-    if (deleteButton) {
-      deleteButton.addEventListener('click', function() {
-        const postId = getPostIdFromURL();
-        if (confirm('确实要删除此帖子吗？')) {
-          deletePost(postId);
-        }
-      });
-    }
+
   }
 
   function populatePostDetails(post) {
