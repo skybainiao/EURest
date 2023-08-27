@@ -60,7 +60,7 @@
 
 <body>
 
-<div>Test</div>
+
 <div class="post-content">
   <div class="images-slider">
     <!-- Images will be populated dynamically -->
@@ -131,6 +131,7 @@
         imageRef.getDownloadURL().then(url => {
           const img = document.createElement('img');
           img.src = url;
+
           imagesSliderDiv.appendChild(img);
         });
       });

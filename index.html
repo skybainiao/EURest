@@ -574,7 +574,7 @@
 
         const coverDiv = document.createElement('div');
         coverDiv.className = 'cover-wp';
-        coverDiv.style.width = '30%';
+        coverDiv.style.width = '60%';
 
         const img = document.createElement('img');
         img.id = `img${index + 1}`;
@@ -599,6 +599,7 @@
         shopNameP.id = `time${index + 1}`;
         shopNameP.innerText = post.shopName;
         textDiv.appendChild(shopNameP);
+
 
         contentDiv.appendChild(textDiv);
         anchor.appendChild(contentDiv);
@@ -627,6 +628,25 @@
         }
       });
     }
+
+    function deletePost(postId, gridItem) {
+      // 删除firebase中的帖子
+      const postRef = database.ref('shopDetails/' + postId);
+      postRef.remove()
+        .then(function() {
+          console.log("Post deleted successfully from Firebase.");
+          // 从主页中移除帖子
+          gridItem.remove();
+        })
+        .catch(function(error) {
+          console.error("Error deleting post: ", error);
+        });
+    }
+
+
+
+
+
 
 
 
