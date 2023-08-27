@@ -89,7 +89,7 @@
 
 </div>
 
-<div class="delete-button-container">
+<div class="delete-button-container" id="de" style='display: none'>
   <button id="deletePostButton">删除帖子</button>
 </div>
 <!-- Firebase and other JS scripts -->
@@ -107,19 +107,28 @@
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 
+
+  let username = localStorage.getItem('username');
+  let de = document.getElementById('de');
+
   window.onload = function() {
     const postId = getPostIdFromURL();
     fetchPostDetails(postId);
 
-    const deleteButton = document.getElementById('deletePostButton');
-    if (deleteButton) {
-      deleteButton.addEventListener('click', function() {
-        const postId = getPostIdFromURL();
-        if (confirm('确实要删除此帖子吗？')) {
-          deletePost(postId);
-        }
-      });
+
+    if (username==='tester' || username==='chen' || username==='idfc'){
+      de.style.display='block';
+      const deleteButton = document.getElementById('deletePostButton');
+      if (deleteButton) {
+        deleteButton.addEventListener('click', function() {
+          const postId = getPostIdFromURL();
+          if (confirm('确实要删除此帖子吗？')) {
+            deletePost(postId);
+          }
+        });
+      }
     }
+
   }
 
   function deletePost(postId) {
@@ -127,13 +136,26 @@
     postRef.remove()
       .then(function() {
         alert('帖子删除成功！');
-        window.location.href = 'index.html'; // 修改为你的主页URL
+        showReturnHomeLink();  // 调用此方法来显示返回主页的链接
       })
       .catch(function(error) {
         console.error("删除帖子时发生错误：", error);
         alert('帖子删除失败，请稍后重试。');
       });
   }
+
+  function showReturnHomeLink() {
+    const content = document.querySelector('.post-content');
+    content.innerHTML = `
+    <div style="text-align: center; padding: 20px;">
+      <p>帖子已删除。</p>
+      <a href="https://skybainiao.github.io/EURest/" style="font-size: 18px;">返回主页</a>
+    </div>
+  `;
+  }
+
+
+
 
 
   function getPostIdFromURL() {
