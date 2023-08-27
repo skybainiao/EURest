@@ -64,8 +64,67 @@
       background-color: #95a5a6;
       cursor: not-allowed;
     }
+    /* The modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* Black with a bit of opacity */
+      overflow-y: auto; /* Enable scrolling */
+    }
 
+    /* Modal content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto; /* 5% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%; /* Could be more or less, depending on screen size */
+      max-height: 80vh;  /* 视口高度的80% */
+      overflow-y: scroll;
+    }
 
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover, .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .city-btn {
+      margin: 5px;
+      padding: 8px 15px;
+      cursor: pointer;
+      background-color: #007BFF;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .city-btn:hover {
+      background-color: #0056b3;
+    }
+
+    h2 {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+      margin-top: 20px;
+    }
+
+    h3 {
+      margin-left: 10px;
+    }
   </STYLE>
 </head>
 
@@ -78,13 +137,90 @@
 
 
   <header>
+
+    <<div id="cityModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+
+      <h2 style="color: #167e7e">北欧</h2>
+
+      <h3 style="color: #167e7e">瑞典</h3>
+      <button class="city-btn">斯德哥尔摩</button>
+      <button class="city-btn">哥德堡</button>
+
+      <h3 style="color: #167e7e">挪威</h3>
+      <button class="city-btn">奥斯陆</button>
+      <button class="city-btn">卑尔根</button>
+
+      <h3 style="color: #167e7e">丹麦</h3>
+      <button class="city-btn">哥本哈根</button>
+
+      <h3 style="color: #167e7e">芬兰</h3>
+      <button class="city-btn">赫尔辛基</button>
+
+      <h2 style="color: #167e7e">东欧</h2>
+
+      <h3 style="color: #167e7e">俄罗斯</h3>
+      <button class="city-btn">莫斯科</button>
+      <button class="city-btn">圣彼得堡</button>
+
+      <h3 style="color: #167e7e">波兰</h3>
+      <button class="city-btn">华沙</button>
+      <button class="city-btn">克拉科夫</button>
+
+      <h3 style="color: #167e7e">捷克</h3>
+      <button class="city-btn">布拉格</button>
+
+      <h3 style="color: #167e7e">匈牙利</h3>
+      <button class="city-btn">布达佩斯</button>
+
+      <h2 style="color: #167e7e">西欧</h2>
+
+      <h3 style="color: #167e7e">法国</h3>
+      <button class="city-btn">巴黎</button>
+      <button class="city-btn">里昂</button>
+
+      <h3 style="color: #167e7e">德国</h3>
+      <button class="city-btn">柏林</button>
+      <button class="city-btn">慕尼黑</button>
+
+      <h3 style="color: #167e7e">英国</h3>
+      <button class="city-btn">伦敦</button>
+      <button class="city-btn">爱丁堡</button>
+
+      <h3 style="color: #167e7e">荷兰</h3>
+      <button class="city-btn">阿姆斯特丹</button>
+
+      <h3 style="color: #167e7e">比利时</h3>
+      <button class="city-btn">布鲁塞尔</button>
+
+      <h2 style="color: #167e7e">南欧</h2>
+
+      <h3 style="color: #167e7e">西班牙</h3>
+      <button class="city-btn">马德里</button>
+      <button class="city-btn">巴塞罗那</button>
+
+      <h3 style="color: #167e7e">意大利</h3>
+      <button class="city-btn">罗马</button>
+      <button class="city-btn">米兰</button>
+
+      <h3 style="color: #167e7e">葡萄牙</h3>
+      <button class="city-btn">里斯本</button>
+
+      <h3 style="color: #167e7e">希腊</h3>
+      <button class="city-btn">雅典</button>
+
+      <!-- ...以此类推，你可以继续添加其他国家的城市 -->
+    </div>
+  </div>
+
     <nav>
       <a href="index.html" id="logo">欧洲玩乐网</a>
       <a  id="lg" href="html/login.html"  target="_self">登录/注册</a>
       <ul>
-        <li><a id="28" href="#">中餐</a></li>
-        <li><a id="12" href="#">西餐</a></li>
-        <li><a id="14" href="#">酒店</a></li>
+        <li><a id="28" href="#">饭店</a></li>
+        <li><a id="12" href="#">向导</a></li>
+        <li><a id="14" href="#">民宿</a></li>
         <li><a id="18" href="#">景点</a></li>
         <li><a id="80" href="#">交通</a></li>
         <li><a id="35" href="#">城市</a></li>
@@ -143,13 +279,41 @@
       changeStatus();
       loadPosts(currentPage, null); // 初始化为 null 类别
 
+// Get the modal
+      var modal = document.getElementById('cityModal');
+
+// Get the button that opens the modal
+      var btn = document.getElementById('35');
+
+// Get the <span> element that closes the modal
+      var span = document.getElementsByClassName('close')[0];
+
+// When the user clicks the button, open the modal
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+
+// When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+// When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+
+
+
       // 为导航链接添加事件监听器
       document.getElementById("28").addEventListener('click', function() {
-        loadPosts(currentPage, '中餐');
+        loadPosts(currentPage, '饭店');
       });
 
       document.getElementById("12").addEventListener('click', function() {
-        loadPosts(currentPage, '西餐');
+        loadPosts(currentPage, '向导');
       });
 
       document.getElementById("18").addEventListener('click', function() {
@@ -157,7 +321,7 @@
       });
 
       document.getElementById("14").addEventListener('click', function() {
-        loadPosts(currentPage, '酒店');
+        loadPosts(currentPage, '民宿');
       });
 
       document.getElementById("35").addEventListener('click', function() {
