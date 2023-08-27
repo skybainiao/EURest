@@ -55,6 +55,21 @@
     .images-slider img:hover {
       transform: scale(1.05);
     }
+
+    .delete-button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #deletePostButton {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
   </style>
 </head>
 
@@ -69,6 +84,13 @@
   <div class="post-details">
     <!-- Post details will be populated dynamically -->
   </div>
+
+
+
+</div>
+
+<div class="delete-button-container">
+  <button id="deletePostButton">删除帖子</button>
 </div>
 <!-- Firebase and other JS scripts -->
 <script>
@@ -88,7 +110,23 @@
   window.onload = function() {
     const postId = getPostIdFromURL();
     fetchPostDetails(postId);
+
+
   }
+
+  function deletePost(postId) {
+    const postRef = database.ref(`shopDetails/${postId}`);
+    postRef.remove()
+      .then(function() {
+        alert('帖子删除成功！');
+        window.location.href = 'your_homepage_url_here.html'; // 修改为你的主页URL
+      })
+      .catch(function(error) {
+        console.error("删除帖子时发生错误：", error);
+        alert('帖子删除失败，请稍后重试。');
+      });
+  }
+
 
   function getPostIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -110,6 +148,16 @@
       const imageFolderPath = `shopImages/${post.shopName}/${postId}/`;
       populateImages(imageFolderPath);
     });
+
+    const deleteButton = document.getElementById('deletePostButton');
+    if (deleteButton) {
+      deleteButton.addEventListener('click', function() {
+        const postId = getPostIdFromURL();
+        if (confirm('确实要删除此帖子吗？')) {
+          deletePost(postId);
+        }
+      });
+    }
   }
 
   function populatePostDetails(post) {
