@@ -96,12 +96,74 @@
       border-color: #007BFF;
     }
 
+    /* The modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* Black with a bit of opacity */
+      overflow-y: auto; /* Enable scrolling */
+    }
+
+    /* Modal content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto; /* 5% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%; /* Could be more or less, depending on screen size */
+      max-height: 80vh;  /* 视口高度的80% */
+      overflow-y: scroll;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover, .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .city-btn {
+      margin: 5px;
+      padding: 8px 15px;
+      cursor: pointer;
+      background-color: #007BFF;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .city-btn:hover {
+      background-color: #0056b3;
+    }
+
+    h2 {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+      margin-top: 20px;
+    }
+
+    h3 {
+      margin-left: 10px;
+    }
+
   </style>
 </head>
 
 <body>
 
-<h1>发布店铺美食信息</h1>
+<h1>发布信息</h1>
 
 <div id="feedback-container">
   <span id="feedback">上传中...</span><div id="loading-icon"></div>
@@ -116,18 +178,22 @@
 
   <label for="storeType">种类:
     <select id="storeType" name="storeType" required>
-      <option value="中餐">中餐</option>
-      <option value="西餐">西餐</option>
+      <option value="饭店">饭店</option>
+      <option value="向导">向导</option>
       <option value="交通">交通</option>
       <option value="景点">景点</option>
-      <option value="酒店">酒店</option>
+      <option value="民宿">民宿</option>
     </select>
   </label>
 
-  <label for="address">地址:</label>
-  <input type="text" id="address" name="address" required>
+  <label>城市:
+    <button type="button" id="chooseCity">选择城市</button>
+    <span id="chosenCity"></span>
+    <input type="hidden" id="address" name="address">
+  </label>
 
-  <label for="introduction">介绍:</label>
+
+  <label for="introduction">介绍(具体地址可写在这里):</label>
   <textarea id="introduction" name="introduction" rows="4" required></textarea>
 
   <label for="phoneNumber">联系电话:</label>
@@ -138,6 +204,106 @@
 
   <button id="submitBtn" type="submit">发布</button>
 </form>
+
+<div id="cityModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+
+    <h2 style="color: #167e7e">北欧</h2>
+
+    <h3 style="color: #167e7e">瑞典</h3>
+    <button class="city-btn">斯德哥尔摩</button>
+    <button class="city-btn">哥德堡</button>
+    <button class="city-btn">马尔默</button>
+    <button class="city-btn">乌普萨拉</button>
+
+    <h3 style="color: #167e7e">挪威</h3>
+    <button class="city-btn">奥斯陆</button>
+    <button class="city-btn">卑尔根</button>
+    <button class="city-btn">斯塔万格</button>
+    <button class="city-btn">特隆赫姆</button>
+
+    <h3 style="color: #167e7e">丹麦</h3>
+    <button class="city-btn">哥本哈根</button>
+    <button class="city-btn">奥胡斯</button>
+    <button class="city-btn">奥尔堡</button>
+    <button class="city-btn">奥登塞</button>
+
+    <h3 style="color: #167e7e">芬兰</h3>
+    <button class="city-btn">赫尔辛基</button>
+    <button class="city-btn">坦佩雷</button>
+    <button class="city-btn">图尔库</button>
+    <button class="city-btn">瓦萨</button>
+
+    <h2 style="color: #167e7e">东欧</h2>
+
+    <h3 style="color: #167e7e">俄罗斯</h3>
+    <button class="city-btn">莫斯科</button>
+    <button class="city-btn">圣彼得堡</button>
+
+    <h3 style="color: #167e7e">波兰</h3>
+    <button class="city-btn">华沙</button>
+    <button class="city-btn">克拉科夫</button>
+
+    <h3 style="color: #167e7e">捷克</h3>
+    <button class="city-btn">布拉格</button>
+    <button class="city-btn">布尔诺</button>
+    <button class="city-btn">奥斯特拉瓦</button>
+
+    <h3 style="color: #167e7e">匈牙利</h3>
+    <button class="city-btn">布达佩斯</button>
+    <button class="city-btn">德布勒森</button>
+    <button class="city-btn">塞格德</button>
+
+    <h2 style="color: #167e7e">西欧</h2>
+
+    <h3 style="color: #167e7e">法国</h3>
+    <button class="city-btn">巴黎</button>
+    <button class="city-btn">里昂</button>
+    <button class="city-btn">马赛</button>
+    <button class="city-btn">尼斯</button>
+
+    <h3 style="color: #167e7e">德国</h3>
+    <button class="city-btn">柏林</button>
+    <button class="city-btn">慕尼黑</button>
+    <button class="city-btn">法兰克福</button>
+    <button class="city-btn">汉堡</button>
+
+    <h3 style="color: #167e7e">英国</h3>
+    <button class="city-btn">伦敦</button>
+    <button class="city-btn">爱丁堡</button>
+
+
+    <h3 style="color: #167e7e">荷兰</h3>
+    <button class="city-btn">阿姆斯特丹</button>
+
+    <h3 style="color: #167e7e">比利时</h3>
+    <button class="city-btn">布鲁塞尔</button>
+
+    <h2 style="color: #167e7e">南欧</h2>
+
+    <h3 style="color: #167e7e">西班牙</h3>
+    <button class="city-btn">马德里</button>
+    <button class="city-btn">巴塞罗那</button>
+    <button class="city-btn">瓦伦西亚</button>
+    <button class="city-btn">塞维利亚</button>
+
+    <h3 style="color: #167e7e">意大利</h3>
+    <button class="city-btn">罗马</button>
+    <button class="city-btn">米兰</button>
+    <button class="city-btn">佛罗伦萨</button>
+    <button class="city-btn">那不勒斯</button>
+
+    <h3 style="color: #167e7e">葡萄牙</h3>
+    <button class="city-btn">里斯本</button>
+
+    <h3 style="color: #167e7e">希腊</h3>
+    <button class="city-btn">雅典</button>
+
+    <!-- ...以此类推，你可以继续添加其他国家的城市 -->
+  </div>
+</div>
+
 
 <script type="module">
   const firebaseConfig = {
@@ -154,6 +320,30 @@
 
 
 
+  window.onload = function() {
+    const chooseCityButton = document.getElementById('chooseCity');
+    const chosenCitySpan = document.getElementById('chosenCity');
+    const addressInput = document.getElementById('address');
+    const cityModal = document.getElementById('cityModal');
+    const cityButtons = document.querySelectorAll('.city-btn');
+    const closeModal = document.querySelector('.close');
+
+    chooseCityButton.addEventListener('click', function() {
+      cityModal.style.display = 'block';
+    });
+
+    closeModal.addEventListener('click', function() {
+      cityModal.style.display = 'none';
+    });
+
+    cityButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        chosenCitySpan.textContent = this.textContent;
+        addressInput.value = this.textContent;
+        cityModal.style.display = 'none';
+      });
+    });
+  };
 
   // 获取username
   let username = localStorage.getItem("username");
@@ -218,7 +408,7 @@
       newPostRef.set({
         title: title,
         shopName: shopName,
-        address: address,
+        city: address,
         description: description,
         phoneNumber: phoneNumber,
         storeType: storeType

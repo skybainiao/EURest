@@ -64,6 +64,8 @@
       background-color: #95a5a6;
       cursor: not-allowed;
     }
+
+
     /* The modal (background) */
     .modal {
       display: none; /* Hidden by default */
@@ -138,7 +140,7 @@
 
   <header>
 
-    <<div id="cityModal" class="modal">
+    <div id="cityModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
 
@@ -147,16 +149,26 @@
       <h3 style="color: #167e7e">瑞典</h3>
       <button class="city-btn">斯德哥尔摩</button>
       <button class="city-btn">哥德堡</button>
+      <button class="city-btn">马尔默</button>
+      <button class="city-btn">乌普萨拉</button>
 
       <h3 style="color: #167e7e">挪威</h3>
       <button class="city-btn">奥斯陆</button>
       <button class="city-btn">卑尔根</button>
+      <button class="city-btn">斯塔万格</button>
+      <button class="city-btn">特隆赫姆</button>
 
       <h3 style="color: #167e7e">丹麦</h3>
       <button class="city-btn">哥本哈根</button>
+      <button class="city-btn">奥胡斯</button>
+      <button class="city-btn">奥尔堡</button>
+      <button class="city-btn">奥登塞</button>
 
       <h3 style="color: #167e7e">芬兰</h3>
       <button class="city-btn">赫尔辛基</button>
+      <button class="city-btn">坦佩雷</button>
+      <button class="city-btn">图尔库</button>
+      <button class="city-btn">瓦萨</button>
 
       <h2 style="color: #167e7e">东欧</h2>
 
@@ -170,23 +182,32 @@
 
       <h3 style="color: #167e7e">捷克</h3>
       <button class="city-btn">布拉格</button>
+      <button class="city-btn">布尔诺</button>
+      <button class="city-btn">奥斯特拉瓦</button>
 
       <h3 style="color: #167e7e">匈牙利</h3>
       <button class="city-btn">布达佩斯</button>
+      <button class="city-btn">德布勒森</button>
+      <button class="city-btn">塞格德</button>
 
       <h2 style="color: #167e7e">西欧</h2>
 
       <h3 style="color: #167e7e">法国</h3>
       <button class="city-btn">巴黎</button>
       <button class="city-btn">里昂</button>
+      <button class="city-btn">马赛</button>
+      <button class="city-btn">尼斯</button>
 
       <h3 style="color: #167e7e">德国</h3>
       <button class="city-btn">柏林</button>
       <button class="city-btn">慕尼黑</button>
+      <button class="city-btn">法兰克福</button>
+      <button class="city-btn">汉堡</button>
 
       <h3 style="color: #167e7e">英国</h3>
       <button class="city-btn">伦敦</button>
       <button class="city-btn">爱丁堡</button>
+
 
       <h3 style="color: #167e7e">荷兰</h3>
       <button class="city-btn">阿姆斯特丹</button>
@@ -199,10 +220,14 @@
       <h3 style="color: #167e7e">西班牙</h3>
       <button class="city-btn">马德里</button>
       <button class="city-btn">巴塞罗那</button>
+      <button class="city-btn">瓦伦西亚</button>
+      <button class="city-btn">塞维利亚</button>
 
       <h3 style="color: #167e7e">意大利</h3>
       <button class="city-btn">罗马</button>
       <button class="city-btn">米兰</button>
+      <button class="city-btn">佛罗伦萨</button>
+      <button class="city-btn">那不勒斯</button>
 
       <h3 style="color: #167e7e">葡萄牙</h3>
       <button class="city-btn">里斯本</button>
@@ -243,6 +268,7 @@
     <section class="slide-page" data-index="0">
       <div class="header-section">
         <h1 id="tip">主页推荐</h1>
+        <h2 id="shouCity" style="margin-top: 8%;font-size: 20px" ></h2>
         <a href="html/post.html">
           <button id="upload">发布</button>
         </a>
@@ -298,7 +324,7 @@
         modal.style.display = "none";
       }
 
-// When the user clicks anywhere outside of the modal, close it
+// When the user clicks anywhere outside the modal, close it
       window.onclick = function(event) {
         if (event.target == modal) {
           modal.style.display = "none";
@@ -331,6 +357,31 @@
       document.getElementById("80").addEventListener('click', function() {
         loadPosts(currentPage, '交通');
       });
+
+
+      // ... 其他代码 ...
+
+// 获取所有城市按钮的引用
+      var cityButtons = document.getElementsByClassName('city-btn');
+
+// 为每个城市按钮添加事件处理器
+      for (let btn of cityButtons) {
+        btn.addEventListener('click', function() {
+          // 更新h2元素以显示所选城市
+          document.querySelector('.header-section h2').textContent = "城市: " + btn.textContent;
+
+          // 使用loadPosts方法加载与所选城市相关的帖子
+          document.getElementById('shouCity').innerHTML=btn.textContent;
+          loadPostsFromCity(currentPage, btn.textContent);  // <--- 这里是关键的调用
+
+          // 关闭模态窗口
+          modal.style.display = "none";
+        });
+      }
+
+// ... 其他代码 ...
+
+
     };
 
     function changeStatus() {
@@ -372,7 +423,73 @@
       let query = database.ref('shopDetails');
 
       if (storeType) {
-        query = query.orderByChild('storeType').equalTo(storeType);
+        query = query.orderByChild('type').equalTo(storeType);
+      }
+
+      query.once('value').then(snapshot => {
+        let allPosts = snapshot.val();
+        if (!allPosts) {
+          console.error("No posts retrieved from database.");
+          return;
+        }
+
+        let posts = {};
+        let postKeys = Object.keys(allPosts).slice(startIndex, endIndex);
+        postKeys.forEach(key => {
+          posts[key] = allPosts[key];
+          posts[key].id = key;
+        });
+
+        let fetchImageURLPromises = [];
+
+        for (let postId in posts) {
+          let shopName = posts[postId].shopName;
+          let imageFolderPath = `shopImages/${shopName}/${postId}/`;
+          let imageFolderRef = firebase.storage().ref(imageFolderPath);
+
+          let promise = imageFolderRef.listAll().then(result => {
+            if (result.items.length === 0) {
+              return null;
+            }
+            let randomImageRef = result.items[Math.floor(Math.random() * result.items.length)];
+            return randomImageRef.getDownloadURL();
+          });
+
+          fetchImageURLPromises.push(promise);
+        }
+
+        Promise.all(fetchImageURLPromises)
+          .then(imageURLs => {
+            imageURLs.forEach((imageURL, index) => {
+              let postId = Object.keys(posts)[index];
+              posts[postId].imageURL = imageURL;
+            });
+
+            populatePosts(posts);
+          })
+          .catch(error => {
+            console.error("Error fetching image URLs: ", error);
+          });
+
+      }).catch(error => {
+        console.error("Error fetching posts from database: ", error);
+      });
+
+
+
+
+
+
+    }
+
+    function loadPostsFromCity(page, city) {
+      const startIndex = (page - 1) * postsPerPage;
+      const endIndex = startIndex + postsPerPage;
+
+      let query = database.ref('shopDetails');
+
+      if (city) {
+        query = query.orderByChild('city').equalTo(city);
       }
 
       query.once('value').then(snapshot => {
