@@ -433,11 +433,16 @@
           return;
         }
 
+        // 排序所有帖子，并为每个帖子添加id属性
+        let sortedPostsArray = Object.entries(allPosts).map(([id, post]) => ({ ...post, id })).sort((a, b) => b.rating - a.rating);
+
+        // 从已排序的数组中获取当前页面的帖子
+        let currentPostsArray = sortedPostsArray.slice(startIndex, endIndex);
+
+        // 转换数组回对象
         let posts = {};
-        let postKeys = Object.keys(allPosts).slice(startIndex, endIndex);
-        postKeys.forEach(key => {
-          posts[key] = allPosts[key];
-          posts[key].id = key;
+        currentPostsArray.forEach(post => {
+          posts[post.id] = post;
         });
 
         let fetchImageURLPromises = [];
@@ -494,16 +499,22 @@
 
       query.once('value').then(snapshot => {
         let allPosts = snapshot.val();
+
         if (!allPosts) {
           console.error("No posts retrieved from database.");
           return;
         }
 
+        // 排序所有帖子，并为每个帖子添加id属性
+        let sortedPostsArray = Object.entries(allPosts).map(([id, post]) => ({ ...post, id })).sort((a, b) => b.rating - a.rating);
+
+        // 从已排序的数组中获取当前页面的帖子
+        let currentPostsArray = sortedPostsArray.slice(startIndex, endIndex);
+
+        // 转换数组回对象
         let posts = {};
-        let postKeys = Object.keys(allPosts).slice(startIndex, endIndex);
-        postKeys.forEach(key => {
-          posts[key] = allPosts[key];
-          posts[key].id = key;
+        currentPostsArray.forEach(post => {
+          posts[post.id] = post;
         });
 
         let fetchImageURLPromises = [];
@@ -600,6 +611,9 @@
         shopNameP.innerText = post.shopName;
         textDiv.appendChild(shopNameP);
 
+        const ratingP = document.createElement('p');
+        ratingP.innerText = "评分: " + post.rating;
+        textDiv.appendChild(ratingP);
 
         contentDiv.appendChild(textDiv);
         anchor.appendChild(contentDiv);

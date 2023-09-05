@@ -43,6 +43,7 @@
     }
 
     button[type="submit"] {
+      width: 100%;
       background-color: #007BFF;
       color: white;
       padding: 10px 20px;
@@ -158,12 +159,21 @@
       margin-left: 10px;
     }
 
+    /* 为星星添加些样式 */
+    .star {
+      cursor: pointer;
+      font-size: 24px;
+      padding: 1px;
+      color: gold;
+    }
+
   </style>
 </head>
 
 <body>
-
+<a href="https://skybainiao.github.io/EURest/" style="font-size: 18px;">返回主页</a>
 <h1>发布信息</h1>
+
 
 <div id="feedback-container">
   <span id="feedback">上传中...</span><div id="loading-icon"></div>
@@ -191,6 +201,7 @@
     <span id="chosenCity"></span>
     <input type="hidden" id="address" name="address">
   </label>
+  <br>
 
 
   <label for="introduction">介绍(具体地址可写在这里):</label>
@@ -198,6 +209,23 @@
 
   <label for="phoneNumber">联系电话:</label>
   <input type="tel" id="phoneNumber" name="phoneNumber" required>
+
+  <label for="ratingValue">评分:</label>
+  <div id="rating-container">
+    <span class="star" data-value="1">☆</span>
+    <span class="star" data-value="2">☆</span>
+    <span class="star" data-value="3">☆</span>
+    <span class="star" data-value="4">☆</span>
+    <span class="star" data-value="5">☆</span>
+    <span class="star" data-value="6">☆</span>
+    <span class="star" data-value="7">☆</span>
+    <span class="star" data-value="8">☆</span>
+    <span class="star" data-value="9">☆</span>
+    <span class="star" data-value="10">☆</span>
+    <input type="hidden" id="ratingValue" name="ratingValue" value="0">
+  </div>
+  <br>
+
 
   <label for="images">图片 (可以选择多张):</label>
   <input type="file" id="images" name="images" multiple accept="image/*" required>
@@ -373,6 +401,29 @@
     });
   }
 
+  const stars = document.querySelectorAll("#rating-container .star");
+
+  stars.forEach(star => {
+    star.addEventListener("click", function() {
+      let value = parseInt(this.getAttribute("data-value"));
+
+      // 更新隐藏的input字段，以便可以将其保存到数据库
+      document.getElementById("ratingValue").value = value;
+
+      // 更新UI以显示用户选择的星星数
+      for(let i = 0; i < stars.length; i++) {
+        if (i < value) {
+          stars[i].textContent = "★";
+        } else {
+          stars[i].textContent = "☆";
+        }
+      }
+    });
+  });
+
+
+
+
   function showLoading() {
     document.getElementById("feedback-container").style.display = "inline";
   }
@@ -404,6 +455,7 @@
 
       // 使用给定的postId
       let newPostRef = db.child(postId);
+      const rating = document.getElementById("ratingValue").value;
 
       newPostRef.set({
         title: title,
@@ -411,12 +463,15 @@
         city: address,
         description: description,
         phoneNumber: phoneNumber,
-        storeType: storeType
+        storeType: storeType,
+        rating: rating
       }).then(() => {
         console.log("数据上传成功");
+        alert("数据上传成功");
         resolve();
       }).catch((error) => {
         console.error("数据上传失败:", error);
+        alert("数据上传失败:", error);
         reject(error);
       });
     });
@@ -443,6 +498,9 @@
   document.getElementById("submitBtn").addEventListener("click", async function(event) {
     event.preventDefault(); // Prevent default form submission
 
+    if (!checkFields()) {  // 检查所有字段，如果有任何空字段，就中断提交操作
+      return;
+    }
     showLoading();
 
     try {
@@ -460,6 +518,55 @@
       console.error("上传错误:", error);
     }
   });
+
+  function checkFields() {
+    // 获取所有需要检查的输入元素
+    const title = document.getElementById("title").value;
+    const shopName = document.getElementById("storeName").value;
+    const address = document.getElementById("address").value;
+    const description = document.getElementById("introduction").value;
+    const phoneNumber = document.getElementById("phoneNumber").value;
+    const storeType = document.getElementById("storeType").value;
+    const rating = document.getElementById("ratingValue").value;
+    const images = document.getElementById("images").files;
+
+    // 检查每个输入元素是否为空，并给出相应的提示
+    if (!title) {
+      alert("标题不能为空!");
+      return false;
+    }
+    if (!shopName) {
+      alert("店名不能为空!");
+      return false;
+    }
+    if (!address) {
+      alert("地址不能为空!");
+      return false;
+    }
+    if (!description) {
+      alert("描述不能为空!");
+      return false;
+    }
+    if (!phoneNumber) {
+      alert("电话号码不能为空!");
+      return false;
+    }
+    if (!storeType) {
+      alert("店铺类型不能为空!");
+      return false;
+    }
+    if (!rating || rating === "0") {  // 这里我们还检查评分是否为0，你可以根据需要进行调整
+      alert("评级不能为空!");
+      return false;
+    }
+    if (!images.length) {
+      alert("您必须上传至少一张图片!");
+      return false;
+    }
+
+
+    return true; // 如果所有字段都不为空，则返回true
+  }
 
 
 
