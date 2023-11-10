@@ -5,7 +5,7 @@ body {
 }
 
 header {
-  background-color: #167e7e;
+  background-color: #1dadad;
   color: white;
   padding: 20px 0;
 }
@@ -23,7 +23,7 @@ nav {
   font-family: 'Pacifico', cursive;
   font-size: 2em;
   text-decoration: none;
-  color: #1b48b0;
+  color: #06ff00;
 }
 
 nav ul {

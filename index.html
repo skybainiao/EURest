@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>欧洲玩乐网</title>
+  <title>CityWalk探索</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -107,7 +107,7 @@
       margin: 5px;
       padding: 8px 15px;
       cursor: pointer;
-      background-color: #007BFF;
+      background-color: rgba(71, 125, 183, 0.96);
       border: none;
       color: white;
       border-radius: 4px;
@@ -115,7 +115,7 @@
     }
 
     .city-btn:hover {
-      background-color: #0056b3;
+      background-color: #56a7ff;
     }
 
     h2 {
@@ -247,21 +247,19 @@
   </div>
 
     <nav>
-      <a href="index.html" id="logo">欧洲玩乐网</a>
+      <a href="index.html" id="logo">CityWalk探索</a>
       <a  id="lg" href="html/login.html"  target="_self">登录/注册</a>
-      <ul>
-        <li><a id="28" href="#">饭店</a></li>
-        <li><a id="12" href="#">向导</a></li>
-        <li><a id="14" href="#">民宿</a></li>
-        <li><a id="18" href="#">景点</a></li>
-        <li><a id="80" href="#">交通</a></li>
-        <li><a id="35" href="#">城市</a></li>
+      <ul style="margin-top: 10px">
+        <li><a id="28" href="#">探索漫步</a></li>
+        <li><a id="12" href="#">本地向导</a></li>
+        <li><a id="14" href="#">民宿景点</a></li>
+        <li><a id="35" href="#">美食地图</a></li>
 
 
         <!-- add more nav items as needed -->
       </ul>
       <div id="search">
-        <input id="searchTxt" type="text" placeholder="搜索餐厅...">
+        <input id="searchTxt" type="text" placeholder="探索城市...">
         <button id="searchBt">搜索</button>
       </div>
 
@@ -342,28 +340,22 @@
 
       // 为导航链接添加事件监听器
       document.getElementById("28").addEventListener('click', function() {
-        loadPosts(currentPage, '饭店');
+        loadPosts(currentPage, '探索漫步');
       });
 
       document.getElementById("12").addEventListener('click', function() {
-        loadPosts(currentPage, '向导');
-      });
-
-      document.getElementById("18").addEventListener('click', function() {
-        loadPosts(currentPage, '景点');
+        loadPosts(currentPage, '本地向导');
       });
 
       document.getElementById("14").addEventListener('click', function() {
-        loadPosts(currentPage, '民宿');
+        loadPosts(currentPage, '民宿景点');
       });
 
       document.getElementById("35").addEventListener('click', function() {
         loadPosts(currentPage, '城市');
       });
 
-      document.getElementById("80").addEventListener('click', function() {
-        loadPosts(currentPage, '交通');
-      });
+
 
 
       // ... 其他代码 ...
