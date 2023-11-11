@@ -568,7 +568,7 @@
 
       // Clear current grid items
       gridContainer.innerHTML = '';
-
+      postArray.reverse();
       postArray.forEach((post, index) => {
         const gridItem = document.createElement('div');
         gridItem.className = 'grid-item';
